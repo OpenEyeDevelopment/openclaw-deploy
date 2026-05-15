@@ -1,0 +1,42 @@
+repos:
+  # ---------------------------------------------------------------------------
+  # General file hygiene
+  # ---------------------------------------------------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: check-shebang-scripts-are-executable
+      - id: check-yaml
+      - id: check-xml
+
+  # ---------------------------------------------------------------------------
+  # Python — lint + format (ruff, 88-char line length)
+  # ---------------------------------------------------------------------------
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.0
+    hooks:
+      - id: ruff
+        args: [--line-length=88, --fix]
+      - id: ruff-format
+        args: [--line-length=88]
+
+  # ---------------------------------------------------------------------------
+  # Bash — lint (shellcheck) + format (shfmt, 4-space indent)
+  # ---------------------------------------------------------------------------
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+
+  - repo: https://github.com/mvdan/sh
+    rev: v3.9.0
+    hooks:
+      - id: shfmt
+        args: [-i, "4", -ci]
