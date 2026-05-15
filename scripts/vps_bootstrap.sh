@@ -85,27 +85,36 @@ https://apt.postgresql.org/pub/repos/apt ${codename}-pgdg main" \
 }
 
 # ---------------------------------------------------------------------------
-# 5. HashiCorp Vault (section 02-07, installed as Debian package via HashiCorp repo)
+# 5. Secrets: age + SOPS (age via apt, SOPS .deb from GitHub releases)
 # ---------------------------------------------------------------------------
 
-install_vault() {
-    if command -v vault &>/dev/null; then
-        info "Vault already installed, skipping."
+install_sops_and_age() {
+    if command -v age &>/dev/null; then
+        info "age already installed, skipping."
+    else
+        info "Installing age..."
+        apt-get install -y age
+        info "age $(age --version) installed."
+    fi
+
+    if command -v sops &>/dev/null; then
+        info "SOPS already installed, skipping."
         return
     fi
-    info "Adding HashiCorp apt repository..."
-    curl -fsSL https://apt.releases.hashicorp.com/gpg |
-        gpg --dearmor -o /usr/share/keyrings/hashicorp.gpg
-    local codename
-    codename=$(lsb_release -cs)
-    echo "deb [signed-by=/usr/share/keyrings/hashicorp.gpg] \
-https://apt.releases.hashicorp.com ${codename} main" \
-        >/etc/apt/sources.list.d/hashicorp.list
-    apt-get update -y
-    info "Installing Vault..."
-    apt-get install -y vault
-    info "Vault $(vault version) installed."
-    info "Configure /etc/vault.d/vault.hcl and run: sudo systemctl enable --now vault"
+    info "Fetching latest SOPS version from GitHub..."
+    local version
+    version=$(curl -fsSL https://api.github.com/repos/getsops/sops/releases/latest |
+        grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')
+    [[ -n "$version" ]] || error "Could not determine latest SOPS version."
+    local arch
+    arch=$(dpkg --print-architecture)
+    local deb="sops_${version}_${arch}.deb"
+    info "Downloading SOPS v${version} (${arch})..."
+    wget --output-document="/tmp/${deb}" \
+        "https://github.com/getsops/sops/releases/download/v${version}/${deb}"
+    apt-get install -y "/tmp/${deb}"
+    rm -f "/tmp/${deb}"
+    info "SOPS $(sops --version) installed."
 }
 
 # ---------------------------------------------------------------------------
@@ -177,7 +186,7 @@ main() {
     install_packages
     install_tailscale
     install_postgresql
-    install_vault
+    install_sops_and_age
     install_headscale
     install_nvm_and_node
 
@@ -187,7 +196,9 @@ main() {
     info "  - Configure UFW rules, fail2ban, and SSH hardening (section 02-02)"
     info "  - Authenticate Tailscale: sudo tailscale up"
     info "  - Run 'pm2 startup' as your deploy user and follow the printed command"
-    info "  - Configure Vault: edit /etc/vault.d/vault.hcl, then: sudo systemctl enable --now vault"
+    info "  - Generate age key: age-keygen -o /etc/openclaw/age-key.txt (keep this safe, back it up)"
+    info "  - Encrypt secrets: sops --age=\$(age-keygen -y /etc/openclaw/age-key.txt) -e secrets.env > secrets.enc.env"
+    info "  - Deploy secrets: scripts/deploy_secrets.sh secrets.enc.env"
     info "  - Configure Headscale: edit /etc/headscale/config.yaml, then: sudo systemctl enable --now headscale"
 }
 
