@@ -9,8 +9,11 @@ set -euo pipefail
 # Helpers
 # ---------------------------------------------------------------------------
 
-info()  { echo "[INFO]  $*"; }
-error() { echo "[ERROR] $*" >&2; exit 1; }
+info() { echo "[INFO]  $*"; }
+error() {
+    echo "[ERROR] $*" >&2
+    exit 1
+}
 
 require_root() {
     [[ $EUID -eq 0 ]] || error "Run this script as root or with sudo."
@@ -68,11 +71,11 @@ install_postgresql() {
     info "Adding PostgreSQL apt repository (pgdg)..."
     local codename
     codename=$(lsb_release -cs)
-    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
-        | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc |
+        gpg --dearmor -o /usr/share/keyrings/postgresql.gpg
     echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] \
 https://apt.postgresql.org/pub/repos/apt ${codename}-pgdg main" \
-        > /etc/apt/sources.list.d/pgdg.list
+        >/etc/apt/sources.list.d/pgdg.list
     apt-get update -y
     info "Installing PostgreSQL..."
     apt-get install -y postgresql postgresql-contrib
@@ -91,13 +94,13 @@ install_vault() {
         return
     fi
     info "Adding HashiCorp apt repository..."
-    curl -fsSL https://apt.releases.hashicorp.com/gpg \
-        | gpg --dearmor -o /usr/share/keyrings/hashicorp.gpg
+    curl -fsSL https://apt.releases.hashicorp.com/gpg |
+        gpg --dearmor -o /usr/share/keyrings/hashicorp.gpg
     local codename
     codename=$(lsb_release -cs)
     echo "deb [signed-by=/usr/share/keyrings/hashicorp.gpg] \
 https://apt.releases.hashicorp.com ${codename} main" \
-        > /etc/apt/sources.list.d/hashicorp.list
+        >/etc/apt/sources.list.d/hashicorp.list
     apt-get update -y
     info "Installing Vault..."
     apt-get install -y vault
@@ -116,8 +119,8 @@ install_headscale() {
     fi
     info "Fetching latest Headscale version from GitHub..."
     local version
-    version=$(curl -fsSL https://api.github.com/repos/juanfont/headscale/releases/latest \
-        | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')
+    version=$(curl -fsSL https://api.github.com/repos/juanfont/headscale/releases/latest |
+        grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')
     [[ -n "$version" ]] || error "Could not determine latest Headscale version."
     local arch
     arch=$(dpkg --print-architecture)
@@ -159,7 +162,7 @@ install_nvm_and_node() {
 
     info "Installing PM2 globally..."
     npm install -g pm2
-    pm2 startup || true   # prints the command to run; may need manual step
+    pm2 startup || true # prints the command to run; may need manual step
 
     info "Node $(node --version) and PM2 $(pm2 --version) installed."
 }
