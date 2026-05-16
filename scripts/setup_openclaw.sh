@@ -157,12 +157,13 @@ main() {
     install_openclaw
     setup_gateway
 
+    local uid
+    uid=$(id -u "$OPENCLAW_USER")
     echo
     info "OpenClaw setup complete."
     info "  Tailscale IP: $(tailscale ip -4 2>/dev/null || echo '<run: tailscale ip -4>')"
-    info "  Control UI:   http://$(tailscale ip -4 2>/dev/null || echo '<tailscale-ip>'):18789"
-    info "  Status:       systemctl status openclaw"
-    info "  Logs:         journalctl -u openclaw -f"
+    info "  Status: XDG_RUNTIME_DIR=/run/user/${uid} sudo -u ${OPENCLAW_USER} systemctl --user status openclaw-gateway.service"
+    info "  Logs:   XDG_RUNTIME_DIR=/run/user/${uid} sudo -u ${OPENCLAW_USER} journalctl --user -u openclaw-gateway.service -f"
 }
 
 main "$@"

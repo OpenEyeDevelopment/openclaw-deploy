@@ -28,8 +28,7 @@
       "resetOnExit": false
     },
     "controlUi": {
-      "allowInsecureAuth": true,
-      "allowedOrigins": ["http://100.64.0.2:18789"]
+      "allowInsecureAuth": true
     },
     "nodes": {
       "denyCommands": [

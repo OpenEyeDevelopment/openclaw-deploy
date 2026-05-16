@@ -70,7 +70,8 @@ install_postgresql() {
     fi
     info "Adding PostgreSQL apt repository (pgdg)..."
     local codename
-    codename=$(lsb_release -cs)
+    # shellcheck source=/dev/null
+    codename=$(. /etc/os-release && echo "$VERSION_CODENAME")
     curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc |
         gpg --dearmor -o /usr/share/keyrings/postgresql.gpg
     echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] \
@@ -151,6 +152,7 @@ install_headscale() {
 install_nvm_and_node() {
     # nvm must be installed as the target (non-root) user.
     # When run as root, install for root; operators should re-run for deploy user.
+    # Note: setup_openclaw.sh installs nvm+node separately for the openclaw user.
     local nvm_dir="${NVM_DIR:-$HOME/.nvm}"
 
     if [[ -s "$nvm_dir/nvm.sh" ]]; then
@@ -161,7 +163,6 @@ install_nvm_and_node() {
         nvm_dir="$HOME/.nvm"
     fi
 
-    # Source nvm within this script
     # shellcheck source=/dev/null
     source "$nvm_dir/nvm.sh"
 
@@ -169,11 +170,7 @@ install_nvm_and_node() {
     nvm install --lts
     nvm alias default lts/*
 
-    info "Installing PM2 globally..."
-    npm install -g pm2
-    pm2 startup || true # prints the command to run; may need manual step
-
-    info "Node $(node --version) and PM2 $(pm2 --version) installed."
+    info "Node $(node --version) installed."
 }
 
 # ---------------------------------------------------------------------------
@@ -193,13 +190,10 @@ main() {
     echo
     info "Bootstrap complete."
     info "Next steps:"
-    info "  - Configure UFW rules, fail2ban, and SSH hardening (section 02-02)"
-    info "  - Authenticate Tailscale: sudo tailscale up"
-    info "  - Run 'pm2 startup' as your deploy user and follow the printed command"
-    info "  - Generate age key: age-keygen -o /etc/openclaw/age-key.txt (keep this safe, back it up)"
-    info "  - Encrypt secrets: sops --age=\$(age-keygen -y /etc/openclaw/age-key.txt) -e secrets.env > secrets.enc.env"
-    info "  - Deploy secrets: scripts/deploy_secrets.sh secrets.enc.env"
-    info "  - Configure Headscale: edit /etc/headscale/config.yaml, then: sudo systemctl enable --now headscale"
+    info "  - Configure UFW rules, fail2ban, and SSH hardening"
+    info "  - Configure Headscale: edit /etc/headscale/config.yaml"
+    info "  - Run: sudo bash scripts/setup_headscale.sh"
+    info "  - Run: sudo bash scripts/setup_openclaw.sh"
 }
 
 main "$@"
