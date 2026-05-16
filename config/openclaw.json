@@ -1,0 +1,127 @@
+{
+  "agents": {
+    "defaults": {
+      "workspace": "/home/openclaw",
+      "model": {
+        "primary": "custom-api-cortecs-ai/qwen3.5-9b"
+      },
+      "models": {
+        "custom-api-cortecs-ai/qwen3-coder-next": {
+          "alias": "qwen3-coder-next"
+        },
+        "custom-api-cortecs-ai/qwen3.5-9b": {
+          "alias": "qwen3.5-9b"
+        }
+      }
+    }
+  },
+  "gateway": {
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "${OPENCLAW_GATEWAY_TOKEN}"
+    },
+    "port": 18789,
+    "bind": "tailnet",
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "controlUi": {
+      "allowInsecureAuth": true,
+      "allowedOrigins": ["http://100.64.0.2:18789"]
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "contacts.add",
+        "calendar.add",
+        "reminders.add",
+        "sms.send",
+        "sms.search"
+      ]
+    }
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "tools": {
+    "profile": "coding",
+    "web": {
+      "search": {
+        "provider": "duckduckgo",
+        "enabled": true
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "telegram": {
+        "enabled": true
+      },
+      "duckduckgo": {
+        "enabled": true
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "groups": {
+        "*": {
+          "requireMention": true
+        }
+      },
+      "botToken": "${TELEGRAM_BOT_TOKEN}"
+    }
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "custom-api-cortecs-ai": {
+        "baseUrl": "https://api.cortecs.ai/v1",
+        "api": "openai-completions",
+        "apiKey": "${CORTECS_API_KEY}",
+        "models": [
+          {
+            "id": "qwen3-coder-next",
+            "name": "qwen3-coder-next (Custom Provider)",
+            "contextWindow": 4000,
+            "maxTokens": 4096,
+            "input": ["text"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "reasoning": false
+          },
+          {
+            "id": "qwen3.5-9b",
+            "name": "qwen3.5-9b (Custom Provider)",
+            "contextWindow": 4000,
+            "maxTokens": 4096,
+            "input": ["text"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "reasoning": false
+          }
+        ]
+      }
+    }
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "session-memory": { "enabled": true },
+        "command-logger": { "enabled": true },
+        "boot-md": { "enabled": true },
+        "bootstrap-extra-files": { "enabled": true },
+        "compaction-notifier": { "enabled": true }
+      }
+    }
+  },
+  "skills": {
+    "install": {
+      "nodeManager": "npm"
+    }
+  }
+}
