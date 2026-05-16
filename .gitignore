@@ -2,6 +2,9 @@
 *.swp
 *.swo
 
+# Local deployment secrets (copy from .env-secret.sample)
+.env-secret
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
