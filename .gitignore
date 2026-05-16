@@ -5,6 +5,9 @@
 # Local deployment secrets (copy from .env-secret.sample)
 .env-secret
 
+# Local client secrets (copy from client/.client-secret-env.sample)
+client/.client-secret-env
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
