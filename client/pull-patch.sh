@@ -36,4 +36,4 @@ echo
 info "Patch saved to current.patch — review it, then:"
 info "  git apply current.patch"
 info "  git add -A && git commit && git push"
-info "  ssh ${VPS} 'cd ~/openclaw-deploy && git reset --hard HEAD && git pull'"
+info "  ssh ${VPS} 'bash ~/openclaw-deploy/scripts/update-repo.sh'"
