@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright 2026 - Ronald Portier (Open Eye Development)
+# SPDX-License-Identifier: AGPL-3.0-or-later  (https://www.gnu.org/licenses/agpl.html)
+#
 # Pull the latest changes from the remote repository.
 # Discards any local modifications and removes untracked files,
 # so the working tree matches origin/main exactly.

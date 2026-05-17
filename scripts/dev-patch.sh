@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright 2026 - Ronald Portier (Open Eye Development)
+# SPDX-License-Identifier: AGPL-3.0-or-later  (https://www.gnu.org/licenses/agpl.html)
+#
 # Export current uncommitted changes as a patch for review on the local machine.
 #
 # Usage: bash scripts/dev-patch.sh

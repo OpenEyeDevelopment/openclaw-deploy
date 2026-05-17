@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright 2026 - Ronald Portier (Open Eye Development)
+# SPDX-License-Identifier: AGPL-3.0-or-later  (https://www.gnu.org/licenses/agpl.html)
+#
 # Health check for the OpenClaw VPS deployment.
 # Verifies all services are running and resources are within limits.
 # Exit code: 0 = all OK, 1 = at least one failure.

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright 2026 - Ronald Portier (Open Eye Development)
+# SPDX-License-Identifier: AGPL-3.0-or-later  (https://www.gnu.org/licenses/agpl.html)
+#
 # Bootstrap: install git and clone the openclaw-deploy repository.
 # Rsync this single file to the server and run it as root.
 # All other setup scripts are then available in the cloned repository.

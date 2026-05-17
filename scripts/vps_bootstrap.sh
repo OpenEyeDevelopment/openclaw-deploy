@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright 2026 - Ronald Portier (Open Eye Development)
+# SPDX-License-Identifier: AGPL-3.0-or-later  (https://www.gnu.org/licenses/agpl.html)
+#
 # Bootstrap a Debian-based VPS for OpenClaw (no Docker).
 # Based on https://www.openclawfieldplaybook.com (French navigation).
 # Run as root or with sudo.

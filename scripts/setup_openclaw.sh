@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright 2026 - Ronald Portier (Open Eye Development)
+# SPDX-License-Identifier: AGPL-3.0-or-later  (https://www.gnu.org/licenses/agpl.html)
+#
 # Install and configure the OpenClaw gateway on a Debian-based VPS.
 # Creates a dedicated 'openclaw' system user, installs Node.js + OpenClaw,
 # deploys config, and sets up a systemd service.

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright 2026 - Ronald Portier (Open Eye Development)
+# SPDX-License-Identifier: AGPL-3.0-or-later  (https://www.gnu.org/licenses/agpl.html)
+#
 # Decrypt a SOPS-encrypted secrets file and install it for OpenClaw.
 # The decrypted file is written to SECRETS_DEST with mode 0600.
 # If the OpenClaw systemd service is running it is restarted afterwards.

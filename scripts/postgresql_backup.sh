@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright 2026 - Ronald Portier (Open Eye Development)
+# SPDX-License-Identifier: AGPL-3.0-or-later  (https://www.gnu.org/licenses/agpl.html)
+#
 # Back up all PostgreSQL databases to /var/backups/postgresql.
 # Intended to be run as the 'postgres' system user via /etc/cron.d.
 #

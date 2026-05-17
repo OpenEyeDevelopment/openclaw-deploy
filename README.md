@@ -91,6 +91,13 @@ Once the repository is on the server:
    sudo bash scripts/setup_postgresql_backup.sh
    ```
 
+## License
+
+Copyright 2026 - Ronald Portier (Open Eye Development)
+
+Licensed under the GNU Affero General Public License v3.0 or later.
+See [LICENSE](LICENSE) or <https://www.gnu.org/licenses/agpl.html> for details.
+
 ## Tested versions
 
 Tested on Debian 13 (Trixie) on a Hetzner VPS.

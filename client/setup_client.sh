@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright 2026 - Ronald Portier (Open Eye Development)
+# SPDX-License-Identifier: AGPL-3.0-or-later  (https://www.gnu.org/licenses/agpl.html)
+#
 # Set up the OpenClaw client to connect to a remote gateway.
 # Installs Tailscale, Node.js (via nvm), and OpenClaw, then configures
 # the local client for remote gateway access over the Tailscale network.

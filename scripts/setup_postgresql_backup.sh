@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright 2026 - Ronald Portier (Open Eye Development)
+# SPDX-License-Identifier: AGPL-3.0-or-later  (https://www.gnu.org/licenses/agpl.html)
+#
 # Install the PostgreSQL backup script and schedule it via /etc/cron.d.
 # Run as root on the VPS after PostgreSQL has been installed.
 
