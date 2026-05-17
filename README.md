@@ -60,6 +60,18 @@ Example with a fork on a feature branch:
 bash bootstrap.sh -r https://github.com/you/openclaw-deploy.git -b my-feature
 ```
 
+### Keeping the server up to date
+
+After the initial bootstrap, pull new commits from the repository with:
+
+```bash
+bash ~/openclaw-deploy/scripts/update-repo.sh
+```
+
+This resets any local changes, removes untracked files, and pulls the latest
+commit. If there are local changes it will ask for confirmation first. Use
+`--force` to skip the prompt.
+
 ### After bootstrap
 
 Once the repository is on the server:
