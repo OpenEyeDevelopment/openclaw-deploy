@@ -88,7 +88,7 @@
           {
             "id": "qwen3-coder-next",
             "name": "qwen3-coder-next (Custom Provider)",
-            "contextWindow": 4000,
+            "contextWindow": 32768,
             "maxTokens": 4096,
             "input": ["text"],
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
@@ -97,7 +97,7 @@
           {
             "id": "qwen3.5-9b",
             "name": "qwen3.5-9b (Custom Provider)",
-            "contextWindow": 4000,
+            "contextWindow": 32768,
             "maxTokens": 4096,
             "input": ["text"],
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
