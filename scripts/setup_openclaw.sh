@@ -145,7 +145,42 @@ setup_gateway() {
     info "Starting OpenClaw gateway service..."
     as_openclaw "${xdg} systemctl --user enable --now openclaw-gateway.service"
     info "OpenClaw gateway service enabled and started."
+}
 
+# ---------------------------------------------------------------------------
+# 6. Install lock-cleanup wrapper in the openclaw user's .bashrc
+# ---------------------------------------------------------------------------
+
+install_lock_cleanup() {
+    local marker="# openclaw-lock-cleanup"
+    local bashrc="${OPENCLAW_HOME}/.bashrc"
+
+    if grep -qF "$marker" "$bashrc" 2>/dev/null; then
+        info "Lock-cleanup wrapper already in ${bashrc}, skipping."
+        return
+    fi
+
+    install -m 0755 "${SCRIPT_DIR}/clean-openclaw-locks.sh" \
+        /usr/local/sbin/clean-openclaw-locks
+
+    cat >>"$bashrc" <<'EOF'
+
+# openclaw-lock-cleanup
+# Cleans stale session locks before every openclaw invocation.
+openclaw() {
+    bash /usr/local/sbin/clean-openclaw-locks
+    command openclaw "$@"
+}
+EOF
+    chown "${OPENCLAW_USER}:${OPENCLAW_USER}" "$bashrc"
+    info "Lock-cleanup wrapper installed in ${bashrc}."
+}
+
+# ---------------------------------------------------------------------------
+# (continued) Firewall
+# ---------------------------------------------------------------------------
+
+setup_firewall() {
     # Restrict gateway port to Tailscale interface only.
     # The gateway binds to 0.0.0.0 so it is reachable via both localhost and
     # the Tailscale IP; UFW ensures it is not reachable on the public interface.
@@ -167,6 +202,8 @@ main() {
     deploy_config
     install_openclaw
     setup_gateway
+    install_lock_cleanup
+    setup_firewall
 
     local uid
     uid=$(id -u "$OPENCLAW_USER")
