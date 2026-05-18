@@ -145,6 +145,14 @@ setup_gateway() {
     info "Starting OpenClaw gateway service..."
     as_openclaw "${xdg} systemctl --user enable --now openclaw-gateway.service"
     info "OpenClaw gateway service enabled and started."
+
+    # Restrict gateway port to Tailscale interface only.
+    # The gateway binds to 0.0.0.0 so it is reachable via both localhost and
+    # the Tailscale IP; UFW ensures it is not reachable on the public interface.
+    if command -v ufw &>/dev/null; then
+        info "Adding UFW rule: allow port 18789 on tailscale0 only..."
+        ufw allow in on tailscale0 to any port 18789
+    fi
 }
 
 # ---------------------------------------------------------------------------

@@ -177,6 +177,21 @@ install_nvm_and_node() {
 }
 
 # ---------------------------------------------------------------------------
+# 8. UFW firewall
+# ---------------------------------------------------------------------------
+
+configure_ufw() {
+    info "Configuring UFW firewall..."
+    ufw allow ssh
+    ufw allow http
+    ufw allow https
+    ufw allow 41641/udp comment 'Tailscale'
+    ufw allow in on tailscale0 comment 'Tailscale network'
+    ufw --force enable
+    info "UFW enabled. Default: deny incoming. Allowed: ssh, http, https, tailscale."
+}
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -189,11 +204,11 @@ main() {
     install_sops_and_age
     install_headscale
     install_nvm_and_node
+    configure_ufw
 
     echo
     info "Bootstrap complete."
     info "Next steps:"
-    info "  - Configure UFW rules, fail2ban, and SSH hardening"
     info "  - Configure Headscale: edit /etc/headscale/config.yaml"
     info "  - Run: sudo bash scripts/setup_headscale.sh"
     info "  - Run: sudo bash scripts/setup_openclaw.sh"

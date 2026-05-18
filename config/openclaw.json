@@ -22,7 +22,8 @@
       "token": "${OPENCLAW_GATEWAY_TOKEN}"
     },
     "port": 18789,
-    "bind": "tailnet",
+    "bind": "custom",
+    "customBindHost": "0.0.0.0",
     "tailscale": {
       "mode": "off",
       "resetOnExit": false
