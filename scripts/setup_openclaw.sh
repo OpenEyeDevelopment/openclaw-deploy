@@ -152,18 +152,23 @@ setup_gateway() {
 # ---------------------------------------------------------------------------
 
 install_lock_cleanup() {
-    local marker="# openclaw-lock-cleanup"
-    local bashrc="${OPENCLAW_HOME}/.bashrc"
-
-    if grep -qF "$marker" "$bashrc" 2>/dev/null; then
-        info "Lock-cleanup wrapper already in ${bashrc}, skipping."
-        return
-    fi
-
     install -m 0755 "${SCRIPT_DIR}/clean-openclaw-locks.sh" \
         /usr/local/sbin/clean-openclaw-locks
 
-    cat >>"$bashrc" <<'EOF'
+    # Systemd drop-in: run lock cleanup before every gateway start/restart.
+    local dropin_dir="${OPENCLAW_HOME}/.config/systemd/user/openclaw-gateway.service.d"
+    mkdir -p "$dropin_dir"
+    install -m 0644 "${SCRIPT_DIR}/../config/systemd/openclaw-gateway-lock-cleanup.conf" \
+        "${dropin_dir}/lock-cleanup.conf"
+    chown -R "${OPENCLAW_USER}:${OPENCLAW_USER}" "$dropin_dir"
+
+    # Shell wrapper: also clean locks before interactive openclaw invocations.
+    local marker="# openclaw-lock-cleanup"
+    local bashrc="${OPENCLAW_HOME}/.bashrc"
+    if grep -qF "$marker" "$bashrc" 2>/dev/null; then
+        info "Lock-cleanup shell wrapper already in ${bashrc}, skipping."
+    else
+        cat >>"$bashrc" <<'EOF'
 
 # openclaw-lock-cleanup
 # Cleans stale session locks before every openclaw invocation.
@@ -172,8 +177,9 @@ openclaw() {
     command openclaw "$@"
 }
 EOF
-    chown "${OPENCLAW_USER}:${OPENCLAW_USER}" "$bashrc"
-    info "Lock-cleanup wrapper installed in ${bashrc}."
+        chown "${OPENCLAW_USER}:${OPENCLAW_USER}" "$bashrc"
+    fi
+    info "Lock-cleanup installed (systemd drop-in + shell wrapper)."
 }
 
 # ---------------------------------------------------------------------------
