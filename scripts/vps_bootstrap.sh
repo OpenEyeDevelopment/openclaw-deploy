@@ -37,14 +37,15 @@ system_update() {
 # ---------------------------------------------------------------------------
 
 install_packages() {
-    info "Installing core packages: curl wget git ufw fail2ban unattended-upgrades"
+    info "Installing core packages: curl wget git ufw fail2ban unattended-upgrades python3-full"
     apt-get install -y \
         curl \
         wget \
         git \
         ufw \
         fail2ban \
-        unattended-upgrades
+        unattended-upgrades \
+        python3-full
 }
 
 # ---------------------------------------------------------------------------

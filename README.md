@@ -110,3 +110,4 @@ Tested on Debian 13 (Trixie) on a Hetzner VPS.
 | age        | 1.2.1   |
 | Headscale  | 0.28.0  |
 | Node.js    | 24.15.0 |
+| Python     | 3.13.5  |
